@@ -1,0 +1,49 @@
+{
+  "movies": [
+    {
+      "id": "acb4f7cb-78cf-4fa0-9b1b-e2db58a2f95b",
+      "title": "The Holiday",
+      "description": "A romantic comedy.",
+      "year": "2008",
+      "genre": "Romance",
+      "imageUrl": "images/christmas.jpg",
+      "timestamp": "9/30/2023, 11:31:46 AM"
+    },
+    {
+      "id": "f5adafb2-406f-4886-8800-750913e5fac0",
+      "title": "The Haunting",
+      "description": "Five people get stuck in a haunted house.",
+      "year": "2012",
+      "genre": "Horror",
+      "imageUrl": "images/haunted-house.jpg",
+      "timestamp": "9/30/2023, 11:32:30 AM"
+    },
+    {
+      "id": "8d5de591-805d-46b5-9a9f-529dd2e896c9",
+      "title": "World War Z",
+      "description": "Zombies take over the world.",
+      "year": "2015",
+      "genre": "Action",
+      "imageUrl": "images/forest.jpg",
+      "timestamp": "9/30/2023, 11:32:54 AM"
+    },
+    {
+      "id": "b4b77025-6f98-424b-a7b6-b297ce4a4c01",
+      "title": "A Winter Storm",
+      "description": "Four friends are stranded in a cabin during a snow storm.",
+      "year": "2017",
+      "genre": "Horror",
+      "imageUrl": "images/winter-cabin.jpg",
+      "timestamp": "9/30/2023, 11:33:17 AM"
+    },
+    {
+      "id": "f00ba2ca-a020-4735-b468-70e0bf637725",
+      "title": "The Wizard",
+      "description": "A magical comedy.",
+      "year": "2019",
+      "genre": "Comedy",
+      "imageUrl": "images/christmas.jpg",
+      "timestamp": "9/30/2023, 12:16:42 PM"
+    }
+  ]
+}

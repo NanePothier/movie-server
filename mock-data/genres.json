@@ -1,0 +1,36 @@
+{
+  "genres": [
+    {
+      "id": "g1",
+      "name": "romance"
+    },
+    {
+      "id": "g2",
+      "name": "comedy"
+    },
+    {
+      "id": "g3",
+      "name": "thriller"
+    },
+    {
+      "id": "g4",
+      "name": "horror"
+    },
+    {
+      "id": "g5",
+      "name": "action"
+    },
+    {
+      "id": "g6",
+      "name": "drama"
+    },
+    {
+      "id": "g7",
+      "name": "crime"
+    },
+    {
+      "id": "g6",
+      "name": "adventure"
+    }
+  ]
+}
