@@ -3,11 +3,29 @@ const { validationResult } = require('express-validator');
 const movies = require('../data/movies');
 const { Movie } = require('../models/Movie');
 const { NotFoundError } = require('../util/errors');
+const { writeDataToFile } = require('../util/data');
 
 exports.getAllMovies = async (req, res, next) => {
   try {
     const movieData = await movies.getAll();
     res.json({ movies: movieData });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getMoviesByGenre = async (req, res, next) => {
+  try {
+    const genre = req.params.genre;
+
+    const movieData = await movies.getAll();
+    const filteredMovies = movieData.filter(
+      (movie) => movie.genre.toLowerCase() === genre
+    );
+
+    res.json({
+      movies: filteredMovies,
+    });
   } catch (error) {
     next(error);
   }
@@ -55,6 +73,29 @@ exports.getMovie = async (req, res, next) => {
 
     res.json({
       movie: movie,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteMovie = async (req, res, next) => {
+  try {
+    const movieId = req.params.movieId;
+
+    const movieData = await movies.getAll();
+    const filteredMovies = movieData.filter((movie) => movie.id !== movieId);
+
+    if (movieData.length === filteredMovies.length) {
+      throw new NotFoundError(
+        'Movie with specified id does not exist. Deletion was unsuccessful.'
+      );
+    }
+
+    await writeDataToFile('mock-data/movies.json', { movies: filteredMovies });
+
+    res.json({
+      message: 'Deletion was successful.',
     });
   } catch (error) {
     next(error);
