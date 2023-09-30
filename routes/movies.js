@@ -8,4 +8,6 @@ router.get('/', moviesController.getAllMovies);
 
 router.post('/movie', movieValidation, moviesController.createMovie);
 
+router.get('/movie/:movieId', moviesController.getMovie);
+
 module.exports = router;

@@ -24,16 +24,11 @@ exports.movieValidation = [
     .withMessage('Invalid genre. Genre should only consist of letters.')
     .custom(async (value) => {
       const genreData = await readDataFromFile('mock-data/genres.json');
-      let found = false;
       const val = value.toLowerCase();
 
-      genreData.genres.forEach((obj) => {
-        if (obj.name === val) {
-          found = true;
-        }
-      });
+      const genre = genreData.genres.find((item) => item.name === val);
 
-      if (found === false) {
+      if (!genre) {
         throw new Error(
           'Invalid genre. Please enter an existing genre or create a new one first.'
         );

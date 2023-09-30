@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 
 const movies = require('../data/movies');
 const { Movie } = require('../models/Movie');
+const { NotFoundError } = require('../util/errors');
 
 exports.getAllMovies = async (req, res, next) => {
   try {
@@ -36,6 +37,25 @@ exports.createMovie = async (req, res, next) => {
         title: title,
       });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getMovie = async (req, res, next) => {
+  try {
+    const movieId = req.params.movieId;
+
+    const movieData = await movies.getAll();
+    const movie = movieData.find((item) => item.id === movieId);
+
+    if (!movie) {
+      throw new NotFoundError('Movie with specified id does not exist.');
+    }
+
+    res.json({
+      movie: movie,
+    });
   } catch (error) {
     next(error);
   }
