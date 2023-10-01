@@ -1,8 +1,8 @@
 const { v4: generateId } = require('uuid');
 
 class Movie {
-  constructor(title, description, year, genre, imageUrl) {
-    this.id = generateId();
+  constructor({ id, title, description, year, genre, imageUrl }) {
+    this.id = id || generateId();
     this.title = title;
     this.description = description;
     this.year = year;

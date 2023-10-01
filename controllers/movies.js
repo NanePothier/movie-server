@@ -47,7 +47,7 @@ exports.createMovie = async (req, res, next) => {
       const imageUrl = req.body.imageUrl;
 
       await movies.createMovie(
-        new Movie(title, description, year, genre, imageUrl)
+        new Movie({ title, description, year, genre, imageUrl })
       );
 
       res.status(201).json({
@@ -74,6 +74,58 @@ exports.getMovie = async (req, res, next) => {
     res.json({
       movie: movie,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.editMovie = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(422).json({
+        errors: errors.array(),
+      });
+    } else {
+      const movieId = req.params.movieId;
+
+      const title = req.body.title;
+      const description = req.body.description;
+      const year = req.body.year;
+      const genre = req.body.genre;
+      const imageUrl = req.body.imageUrl;
+
+      let wasUpdated = false;
+      const movieData = await movies.getAll();
+
+      const updatedMovies = movieData.map((movie) => {
+        if (movie.id === movieId) {
+          wasUpdated = true;
+          return new Movie({
+            id: movieId,
+            title,
+            description,
+            year,
+            genre,
+            imageUrl,
+          });
+        }
+        return movie;
+      });
+
+      if (wasUpdated === false) {
+        throw new NotFoundError(
+          'Movie with specified id does not exist. Could not edit movie.'
+        );
+      }
+
+      await writeDataToFile('mock-data/movies.json', { movies: updatedMovies });
+
+      res.json({
+        message: 'Movie update was successful.',
+      });
+    }
   } catch (error) {
     next(error);
   }
