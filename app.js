@@ -1,13 +1,22 @@
 const http = require('http');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
+const userRoutes = require('./routes/users');
 const movieRoutes = require('./routes/movies');
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(
+  session({
+    secret: 'should be a long string',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,6 +24,8 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+app.use('/user', userRoutes);
 
 app.use('/movies', movieRoutes);
 
