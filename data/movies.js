@@ -1,5 +1,3 @@
-const fs = require('node:fs/promises');
-
 const { NotFoundError } = require('../util/errors');
 const { readDataFromFile, writeDataToFile } = require('../util/data');
 
