@@ -27,6 +27,14 @@ app.use((req, res, next) => {
 
 app.use('/user', userRoutes);
 
+app.use((req, res, next) => {
+  if (!req.session.isLoggedIn) {
+    res.status(401).json({ message: 'Access denied. User is not logged in.' });
+  } else {
+    next();
+  }
+});
+
 app.use('/movies', movieRoutes);
 
 app.use((error, req, res, next) => {

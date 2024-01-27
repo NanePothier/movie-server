@@ -55,3 +55,14 @@ exports.validateUser = (req, res, next) => {
     next(error);
   }
 };
+
+exports.logoutUser = (req, res) => {
+  if (req.session.isLoggedIn) {
+    req.session.destroy((err) => {
+      console.log(err);
+      res.json({ message: 'User logged out successfully.' });
+    });
+  } else {
+    res.status(400).json({ message: 'User is already logged out.' });
+  }
+};

@@ -11,4 +11,6 @@ router.post('/signup', createUserValidation, userController.createUser);
 
 router.post('/login', loginUserValidation, userController.validateUser);
 
+router.post('/logout', userController.logoutUser);
+
 module.exports = router;
