@@ -15,10 +15,16 @@ exports.createUser = async (req, res, next) => {
     } else {
       const email = req.body.email;
       const password = req.body.password;
+      const firstName = req.body.firstName;
+      const lastName = req.body.lastName;
+      const birthday = req.body.birthday;
+      const planId = req.body.planId;
 
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      await userActions.createUser(new User(email, hashedPassword));
+      await userActions.createUser(
+        new User(email, hashedPassword, firstName, lastName, birthday, planId)
+      );
 
       res.status(201).json({
         message: 'User created successfully.',

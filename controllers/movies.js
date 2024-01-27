@@ -16,7 +16,7 @@ exports.getAllMovies = async (req, res, next) => {
 
 exports.getMoviesByGenre = async (req, res, next) => {
   try {
-    const genre = req.params.genre;
+    const genre = req.params.genre.toLowerCase();
 
     const movieData = await movies.getAll();
     const filteredMovies = movieData.filter(

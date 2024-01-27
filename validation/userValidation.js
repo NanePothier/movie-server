@@ -26,6 +26,23 @@ exports.createUserValidation = [
       throw new Error('Passwords do not match. Could not create user.');
     }
   }),
+  body('firstName')
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage(
+      'Invalid first name. First name must be between 1 and 50 characters.'
+    ),
+  body('lastName')
+    .trim()
+    .isLength({ min: 1, max: 50 })
+    .withMessage(
+      'Invalid last name. Last name must be between 1 and 50 characters.'
+    ),
+  body('birthday')
+    .trim()
+    .isLength({ min: 8, max: 10 })
+    .withMessage('Invalid date of birth.'),
+  body('planId').trim().isLength({ min: 1 }),
 ];
 
 exports.loginUserValidation = [

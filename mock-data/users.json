@@ -2,7 +2,11 @@
   "users": [
     {
       "email": "elena@gmail.com",
-      "password": "$2a$12$BreGSPrOxZRJVLAo5A6U6OhdK41S1dBJQNt9/mvspfrU1nbMq/XLW"
+      "password": "$2a$12$to2Ndc6e748owYwzcmdnlO3l9VUe7nyTqgY.hlUWoCVbC0HArdAAC",
+      "firstName": "Elena",
+      "lastName": "HundKatze",
+      "birthday": "10/03/2000",
+      "planId": "p1"
     }
   ]
 }
