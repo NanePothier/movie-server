@@ -3,8 +3,11 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
+
+const { sequelize } = require('./util/database');
 const userRoutes = require('./routes/users');
 const movieRoutes = require('./routes/movies');
+const Movie = require('./models/Movie');
 
 const app = express();
 
@@ -39,5 +42,17 @@ app.use('/', (req, res, next) => {
   res.status(404).send('<h1>Page not found.</h1>');
 });
 
-const server = http.createServer(app);
-server.listen(8080);
+sequelize
+  .sync()
+  .then((result) => {
+    console.log(result);
+    app.listen(8080, () => {
+      console.log('Listening on port 8080');
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+// const server = http.createServer(app);
+// server.listen(8080);

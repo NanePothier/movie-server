@@ -6,7 +6,7 @@ const { movieValidation } = require('../validation/movieValidation');
 
 router.get('/', moviesController.getAllMovies);
 
-router.get('/:genre', moviesController.getMoviesByGenre);
+router.get('/genre/:genre', moviesController.getMoviesByGenre);
 
 router.post('/movie', movieValidation, moviesController.createMovie);
 
