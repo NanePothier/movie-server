@@ -1,0 +1,35 @@
+services:
+  movie_server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8080:8080
+    depends_on:
+      movie_server_db:
+        condition: service_healthy
+
+  movie_server_db:
+    image: postgres
+    restart: always
+    volumes:
+      - movie_server_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=movie_database
+      - PGUSER=postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  movie_server_data:
+
+
+

@@ -1,30 +1,32 @@
 const { validationResult } = require('express-validator');
 
-const movies = require('../data/movies');
 const { Movie } = require('../models/Movie');
 const { NotFoundError } = require('../util/errors');
-const { writeDataToFile } = require('../util/data');
 
 exports.getAllMovies = async (req, res, next) => {
   try {
-    const movieData = await movies.getAll();
-    res.json({ movies: movieData });
-  } catch (error) {
-    next(error);
+    const movies = await Movie.findAll();
+    res.json({ movies });
+  } catch (e) {
+    console.log('Error in getAllMovies');
+    res.status(500).send('Server Error: Could not retrieve movies.');
   }
 };
 
 exports.getMoviesByGenre = async (req, res, next) => {
   try {
-    const genre = req.params.genre.toLowerCase();
+    const genre = req.params.genre;
+    const requestedGenre = genre.charAt(0).toUpperCase() + genre.substring(1);
 
-    const movieData = await movies.getAll();
-    const filteredMovies = movieData.filter(
-      (movie) => movie.genre.toLowerCase() === genre
-    );
+    const movies = await Movie.findAll({
+      where: {
+        genre: requestedGenre,
+      },
+    });
 
     res.json({
-      movies: filteredMovies,
+      movies,
+      genre: requestedGenre,
     });
   } catch (error) {
     next(error);
@@ -41,16 +43,24 @@ exports.createMovie = async (req, res, next) => {
       });
     } else {
       const title = req.body.title;
-      const description = req.body.description;
-      const year = req.body.year;
       const genre = req.body.genre;
+      const year = req.body.year;
+      const description = req.body.description;
+      const director = req.body.director;
+      const pgAge = req.body.pgAge;
       const imageUrl = req.body.imageUrl;
 
-      await movies.createMovie(
-        new Movie({ title, description, year, genre, imageUrl })
-      );
+      const result = await Movie.create({
+        title,
+        genre,
+        year,
+        description,
+        director,
+        pgAge,
+        imageUrl,
+      });
 
-      res.status(201).json({
+      res.json({
         message: 'Created movie successfully.',
         title: title,
       });
@@ -64,15 +74,18 @@ exports.getMovie = async (req, res, next) => {
   try {
     const movieId = req.params.movieId;
 
-    const movieData = await movies.getAll();
-    const movie = movieData.find((item) => item.id === movieId);
+    const movie = await Movie.findOne({
+      where: {
+        id: movieId,
+      },
+    });
 
     if (!movie) {
       throw new NotFoundError('Movie with specified id does not exist.');
     }
 
     res.json({
-      movie: movie,
+      movie,
     });
   } catch (error) {
     next(error);
@@ -91,36 +104,34 @@ exports.editMovie = async (req, res, next) => {
       const movieId = req.params.movieId;
 
       const title = req.body.title;
-      const description = req.body.description;
-      const year = req.body.year;
       const genre = req.body.genre;
+      const year = req.body.year;
+      const description = req.body.description;
+      const director = req.body.director;
+      const pgAge = req.body.pgAge;
       const imageUrl = req.body.imageUrl;
 
-      let wasUpdated = false;
-      const movieData = await movies.getAll();
-
-      const updatedMovies = movieData.map((movie) => {
-        if (movie.id === movieId) {
-          wasUpdated = true;
-          return new Movie({
-            id: movieId,
-            title,
-            description,
-            year,
-            genre,
-            imageUrl,
-          });
-        }
-        return movie;
+      const movie = await Movie.findOne({
+        where: {
+          id: movieId,
+        },
       });
 
-      if (wasUpdated === false) {
+      if (!movie) {
         throw new NotFoundError(
           'Movie with specified id does not exist. Could not edit movie.'
         );
       }
 
-      await writeDataToFile('mock-data/movies.json', { movies: updatedMovies });
+      movie.title = title;
+      movie.genre = genre;
+      movie.year = year;
+      movie.description = description;
+      movie.director = director;
+      movie.pgAge = pgAge;
+      movie.imageUrl = imageUrl;
+
+      movie.save();
 
       res.json({
         message: 'Movie update was successful.',
@@ -135,16 +146,17 @@ exports.deleteMovie = async (req, res, next) => {
   try {
     const movieId = req.params.movieId;
 
-    const movieData = await movies.getAll();
-    const filteredMovies = movieData.filter((movie) => movie.id !== movieId);
+    const numRowsDeleted = Movie.destroy({
+      where: {
+        id: movieId,
+      },
+    });
 
-    if (movieData.length === filteredMovies.length) {
+    if (!numRowsDeleted) {
       throw new NotFoundError(
         'Movie with specified id does not exist. Deletion was unsuccessful.'
       );
     }
-
-    await writeDataToFile('mock-data/movies.json', { movies: filteredMovies });
 
     res.json({
       message: 'Deletion was successful.',
